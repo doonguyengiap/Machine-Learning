@@ -1,0 +1,15 @@
+{
+  "cv_best_score": 1.0,
+  "test_metrics": {
+    "accuracy": 0.9995722840034217,
+    "precision": 1.0,
+    "recall": 0.9991503823279524,
+    "f1": 0.9995750106247344
+  },
+  "best_params": {
+    "n_estimators": 300,
+    "min_samples_split": 5,
+    "min_samples_leaf": 4,
+    "max_depth": 5
+  }
+}
