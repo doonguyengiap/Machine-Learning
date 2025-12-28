@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 3A Superstore Analysis
 
 This repository contains notebooks and helper code to analyze and model the Superstore dataset.
@@ -85,3 +86,7 @@ project-name/                # Thư mục gốc của dự án
 └── .gitignore               # Để loại bỏ các file không cần thiết khi push
 ```
 
+=======
+# Machine-Learning
+Machine Learning
+>>>>>>> d2c21b0d61a78b834fec12945c7652e16c79c361
