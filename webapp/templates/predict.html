@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Predict</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h1>Prediction results</h1>
+      {% if filename %}
+        <p>File: <strong>{{ filename }}</strong></p>
+        {% if preview %}
+          <div class="card">
+            <div class="card-body">
+              {{ preview|safe }}
+            </div>
+          </div>
+        {% else %}
+          <div class="alert alert-info">No preview available.</div>
+        {% endif %}
+      {% else %}
+        <div class="alert alert-secondary">Upload a CSV from the main page to get predictions.</div>
+      {% endif %}
+      <a href="{{ url_for('index') }}" class="btn btn-link mt-3">Back</a>
+    </div>
+  </body>
+</html>

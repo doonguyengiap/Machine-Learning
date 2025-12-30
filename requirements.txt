@@ -7,3 +7,6 @@ xgboost>=1.6
 jupyter
 notebook
 mlxtend
+Flask>=2.0
+joblib
+werkzeug
