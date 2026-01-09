@@ -1,0 +1,92 @@
+KỊCH BẢN THUYẾT TRÌNH: DỰ ÁN 3A SUPERSTORE ANALYTICS
+
+---
+PHẦN 1: GIỚI THIỆU (INTRODUCTION)
+Xin chào mọi người, hôm nay tôi xin trình bày về dự án "3A Superstore Analytics Platform".
+
+Mục tiêu dự án:
+- Xây dựng hệ thống phân tích dữ liệu bán lẻ toàn diện.
+- Ứng dụng Machine Learning để dự đoán hành vi khách hàng và doanh thu.
+- Cung cấp giao diện trực quan (Dashboard) cho cấp quản lý ra quyết định.
+
+---
+PHẦN 2: BÀI TOÁN & GIẢI PHÁP (PROBLEM & SOLUTION)
+
+1. Vấn đề (Problem):
+   - Dữ liệu bán hàng lớn nhưng rời rạc, chưa được khai thác sâu.
+   - Khó khăn trong việc nhận diện khách hàng tiềm năng và khách hàng có nguy cơ rời bỏ.
+   - Thiếu công cụ dự báo doanh thu chính xác theo vùng miền.
+
+2. Giải pháp (Solution):
+   - Xây dựng Web App tích hợp Dashboard theo dõi realtime.
+   - Phát triển các mô hình học máy (Classification & Regression) để dự báo.
+   - Tối ưu hóa trải nghiệm người dùng với giao diện hiện đại.
+
+---
+PHẦN 3: CÔNG NGHỆ SỬ DỤNG (TECHNOLOGY STACK)
+
+1. Backend & Data:
+   - Python 3.10 & Flask: Xử lý logic server và API.
+   - Pandas/Polars: Xử lý dữ liệu lớn hiệu suất cao.
+
+2. Frontend:
+   - Tailwind CSS: Thiết kế giao diện hiện đại, responsive.
+   - Chart.js: Biểu đồ tương tác (Interactive Visualization).
+
+3. Machine Learning:
+   - Scikit-learn & XGBoost: Xây dựng model.
+   - Joblib: Lưu trữ và deploy model.
+
+---
+PHẦN 4: HỆ THỐNG MÔ HÌNH MACHINE LEARNING
+
+Chúng tôi đã thử nghiệm và so sánh 5 mô hình phân loại (Classification) để dự đoán tiềm năng khách hàng/đơn hàng:
+
+1. Logistics Regression (LR):
+   - Accuracy: 51.8% | AUC: 0.54
+   - Ưu điểm: Đơn giản, dễ giải thích.
+
+2. K-Nearest Neighbors (KNN):
+   - Accuracy: 52.2% | AUC: 0.56
+
+3. Random Forest (RF) - Best Model:
+   - Accuracy: 57.8% | AUC: 0.61
+   - Đây là mô hình tốt nhất hiện tại, cân bằng giữa độ chính xác và khả năng tổng quát hóa.
+
+4. Decision Tree (DT):
+   - Accuracy: 55.2% | AUC: 0.56
+
+5. Gradient Boosting (GB):
+   - Accuracy: 54.1% | AUC: 0.59
+
+-> Kết luận: Chọn Random Forest để deploy lên ứng dụng web.
+
+---
+PHẦN 5: CÁC TÍNH NĂNG CHÍNH CỦA ỨNG DỤNG (KEY FEATURES)
+
+1. Dashboard Tổng quan (Analytics):
+   - Theo dõi KPIs: Doanh thu, Đơn hàng, Khách hàng, Giá trị trung bình đơn (AOV).
+   - Biểu đồ phân tích: Doanh thu theo vùng, Top sản phẩm bán chạy, Phân phối nhân khẩu học.
+
+2. Dự báo doanh thu (Forecasting):
+   - Dự báo doanh thu 3 tháng và 6 tháng tới cho từng khu vực.
+   - Hỗ trợ lập kế hoạch nhập hàng và marketing.
+
+3. So sánh mô hình (Model Performance):
+   - Biểu đồ Radar so sánh trực quan hiệu quả các model (Accuracy, Precision, Recall, AUC).
+
+4. Store Data Explorer:
+   - Tra cứu dữ liệu thô và xem trước thông tin chi tiết.
+
+---
+PHẦN 6: DEMO & ĐỊNH HƯỚNG TƯƠNG LAI
+
+(Phần này sẽ demo trực tiếp trên Web App)
+
+Định hướng phát triển:
+- Cải thiện độ chính xác model (Target AUC > 0.75) bằng cách thêm feature engineering.
+- Tích hợp thêm Deep Learning (LSTM) cho bài toán Time-series.
+- Xây dựng hệ thống gợi ý sản phẩm (Recommender System).
+
+---
+Cảm ơn mọi người đã lắng nghe!

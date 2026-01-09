@@ -1,0 +1,10 @@
+{
+  "logistic_regression": {
+    "auc": 0.7957200863090144,
+    "average_precision": 0.8992676201139342
+  },
+  "knn": {
+    "auc": 0.8779328789693925,
+    "average_precision": 0.9237960617752508
+  }
+}

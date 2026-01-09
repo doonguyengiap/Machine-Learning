@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3A Superstore - Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-store text-blue-600 text-2xl mr-3"></i>
+                    <span class="text-xl font-bold text-gray-800">3A Superstore</span>
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="text-gray-600 hover:text-blue-600 transition duration-300">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="/store" class="text-gray-600 hover:text-blue-600 transition duration-300">
+                        <i class="fas fa-store mr-2"></i>Store Data
+                    </a>
+                    <a href="/analytics" class="text-blue-600 font-semibold">
+                        <i class="fas fa-chart-bar mr-2"></i>Analytics
+                    </a>
+                    <a href="/goto/home" class="text-gray-600 hover:text-blue-600 transition duration-300">
+                        <i class="fas fa-info-circle mr-2"></i>About
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl font-bold mb-2">Business Analytics Explorer</h1>
+            <p class="text-xl text-blue-100">Explore key performance indicators and machine learning insights
+            </p>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto p-6">
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 mt-8">
+            <!-- Total Revenue -->
+            <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-600">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-sm font-medium text-gray-500">Total Revenue</h3>
+                    <i class="fas fa-dollar-sign text-blue-600"></i>
+                </div>
+                <p class="text-2xl font-bold text-gray-800" id="statRevenue">-</p>
+            </div>
+
+            <!-- Total Orders -->
+            <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-emerald-500">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-sm font-medium text-gray-500">Total Orders</h3>
+                    <i class="fas fa-shopping-cart text-emerald-500"></i>
+                </div>
+                <p class="text-2xl font-bold text-gray-800" id="statOrders">-</p>
+            </div>
+
+            <!-- Total Customers -->
+            <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-sm font-medium text-gray-500">Total Customers</h3>
+                    <i class="fas fa-users text-purple-500"></i>
+                </div>
+                <p class="text-2xl font-bold text-gray-800" id="statCustomers">-</p>
+            </div>
+
+            <!-- Avg Order Value -->
+            <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-orange-500">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-sm font-medium text-gray-500">Avg Order Value</h3>
+                    <i class="fas fa-chart-line text-orange-500"></i>
+                </div>
+                <p class="text-2xl font-bold text-gray-800" id="statAov">-</p>
+            </div>
+        </div>
+
+        <!-- Revenue Forecasting Section -->
+        <div class="bg-white rounded-xl shadow-xl border-2 border-gray-200 p-8 mt-10 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-yellow-500 pl-4 pb-2">Revenue Forecasting
+            </h2>
+            <div class="bg-gradient-to-br from-gray-50 to-white p-6 rounded-lg shadow-md border-2 border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Predicted Revenue by Region (Next 3 & 6 Months)
+                </h3>
+                <div class="h-80 bg-white rounded p-4 border border-gray-300"><canvas id="forecastChart"></canvas></div>
+            </div>
+        </div>
+
+        <!-- Sales Analytics Section -->
+        <div class="bg-white rounded-xl shadow-xl border-2 border-gray-200 p-8 mt-10 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-indigo-600 pl-4 pb-2">Sales Performance
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Revenue by Region -->
+                <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-lg shadow-lg border-2 border-blue-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Revenue by Region</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="regionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Profitability by City -->
+                <div
+                    class="bg-gradient-to-br from-purple-50 to-white p-6 rounded-lg shadow-lg border-2 border-purple-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Profitability by City (Top 10)</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas
+                            id="profitabilityChart"></canvas></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <!-- Revenue by City -->
+                <div
+                    class="bg-gradient-to-br from-green-50 to-white p-6 rounded-lg shadow-lg border-2 border-green-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Top 10 Cities by Revenue</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="cityChart"></canvas></div>
+                </div>
+
+                <!-- Monthly Seasonality -->
+                <div
+                    class="bg-gradient-to-br from-orange-50 to-white p-6 rounded-lg shadow-lg border-2 border-orange-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Monthly Revenue Seasonality</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas
+                            id="seasonalityChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Revenue by Town and District -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <!-- Revenue by Town -->
+                <div class="bg-gradient-to-br from-pink-50 to-white p-6 rounded-lg shadow-lg border-2 border-pink-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Top 10 Towns by Revenue</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="townChart"></canvas></div>
+                </div>
+
+                <!-- Revenue by District -->
+                <div class="bg-gradient-to-br from-red-50 to-white p-6 rounded-lg shadow-lg border-2 border-red-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Top 10 Districts by Revenue</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="districtChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time & Spend Analytics Section -->
+        <div class="bg-white rounded-xl shadow-xl border-2 border-gray-200 p-8 mt-10 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-green-600 pl-4 pb-2">Time & Spending
+                Patterns</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Sales by Day -->
+                <div class="bg-gradient-to-br from-teal-50 to-white p-6 rounded-lg shadow-lg border-2 border-teal-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Weekly Sales Pattern (by Day)</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="dayChart"></canvas></div>
+                </div>
+
+                <!-- Basket Distribution -->
+                <div
+                    class="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-lg shadow-lg border-2 border-indigo-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Basket Size Distribution</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="basketChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branch Performance Section -->
+        <div class="bg-white rounded-xl shadow-xl border-2 border-gray-200 p-8 mt-10 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-purple-600 pl-4 pb-2">Branch Performance
+            </h2>
+            <div class="bg-gradient-to-br from-violet-50 to-white p-6 rounded-lg shadow-lg border-2 border-violet-200">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Top 10 Branches by Revenue</h3>
+                <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="branchChart"></canvas></div>
+            </div>
+        </div>
+
+        <!-- Demographics Section -->
+        <div class="bg-white rounded-xl shadow-xl border-2 border-gray-200 p-8 mt-10 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-teal-500 pl-4 pb-2">Customer Demographics
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Gender -->
+                <div class="bg-gradient-to-br from-cyan-50 to-white p-6 rounded-lg shadow-lg border-2 border-cyan-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Gender Distribution</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="genderChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Age Groups -->
+                <div class="bg-gradient-to-br from-sky-50 to-white p-6 rounded-lg shadow-lg border-2 border-sky-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Age Groups</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="ageChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profitability & Trends Section -->
+        <div class="bg-white rounded-xl shadow-xl border-2 border-gray-200 p-8 mt-10 mb-10">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-red-500 pl-4 pb-2">Profitability & Trends
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Profit Analysis -->
+                <div class="bg-gradient-to-br from-rose-50 to-white p-6 rounded-lg shadow-lg border-2 border-rose-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Profit vs No Profit Orders</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="profitChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Revenue by Age Groups -->
+                <div
+                    class="bg-gradient-to-br from-emerald-50 to-white p-6 rounded-lg shadow-lg border-2 border-emerald-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Revenue by Age Groups</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="ageRevenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue by Year -->
+            <div class="mt-6">
+                <div
+                    class="bg-gradient-to-br from-amber-50 to-white p-6 rounded-lg shadow-lg border-2 border-amber-200">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Revenue Trend by Year</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="yearChart"></canvas></div>
+                </div>
+            </div>
+            <!-- Model Performance Dashboard Section -->
+            <div class="bg-white rounded-xl shadow-xl border-2 border-gray-200 p-8 mt-10 mb-10">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-blue-500 pl-4 pb-2">Model Performance
+                    Dashboard</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Metrics Table -->
+                    <div
+                        class="lg:col-span-1 bg-gradient-to-br from-blue-50 to-white p-6 rounded-lg shadow-lg border-2 border-blue-200">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Metric Summary</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-sm text-left text-gray-500" id="metricsTable">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-2">Model</th>
+                                        <th class="px-4 py-2">Acc</th>
+                                        <th class="px-4 py-2">F1</th>
+                                        <th class="px-4 py-2">AUC</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <!-- Rows dynamicly inserted -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Chart -->
+                    <div
+                        class="lg:col-span-2 bg-gradient-to-br from-indigo-50 to-white p-6 rounded-lg shadow-lg border-2 border-indigo-200">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Model Comparison</h3>
+                        <div class="h-64 bg-white rounded p-3 border border-gray-300">
+                            <canvas id="modelPerformanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            async function loadDashboards() {
+                // 1. Revenue by Region
+                fetch('/api/revenue_by_region')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+                        new Chart(document.getElementById('regionChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'Revenue',
+                                    data: data.values,
+                                    backgroundColor: '#60A5FA',
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: { y: { beginAtZero: true } }
+                            }
+                        });
+                    });
+
+                // 2. Profitability by City
+                fetch('/api/profitability_by_city')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+                        new Chart(document.getElementById('profitabilityChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'Profitability Rate',
+                                    data: data.values,
+                                    backgroundColor: '#A78BFA',
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                indexAxis: 'y',
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    x: {
+                                        beginAtZero: true,
+                                        max: 1,
+                                        ticks: {
+                                            callback: function (value) {
+                                                return (value * 100).toFixed(0) + '%';
+                                            }
+                                        }
+                                    },
+                                    y: {
+                                        ticks: {
+                                            autoSkip: false
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function (context) {
+                                                let label = context.dataset.label || '';
+                                                if (label) label += ': ';
+                                                if (context.parsed.x !== null) {
+                                                    label += (context.parsed.x * 100).toFixed(1) + '%';
+                                                }
+                                                return label;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    });
+
+                // 3. Branch Performance
+                fetch('/api/branch_performance')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+                        new Chart(document.getElementById('branchChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'Revenue',
+                                    data: data.values,
+                                    backgroundColor: '#6366F1',
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: { y: { beginAtZero: true } }
+                            }
+                        });
+                    });
+
+                // 5. Demographics
+                fetch('/api/demographics')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+
+                        // Gender
+                        const genderColors = data.gender.labels.map(label => {
+                            if (label.toLowerCase() === 'male') return '#60A5FA';
+                            if (label.toLowerCase() === 'female') return '#F472B6';
+                            return '#E5E7EB'; // Default for Unknown
+                        });
+
+                        new Chart(document.getElementById('genderChart'), {
+                            type: 'doughnut',
+                            data: {
+                                labels: data.gender.labels,
+                                datasets: [{
+                                    data: data.gender.values,
+                                    backgroundColor: genderColors
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+
+                        // Age
+                        new Chart(document.getElementById('ageChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: data.age.labels,
+                                datasets: [{
+                                    label: 'Customers',
+                                    data: data.age.values,
+                                    backgroundColor: '#10B981',
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: { y: { beginAtZero: true } }
+                            }
+                        });
+                    });
+
+                // 6. Revenue Forecasting
+                fetch('/api/forecast')
+                    .then(r => r.json())
+                    .then(data => {
+                        const regions = Object.keys(data);
+                        const forecast3m = regions.map(r => data[r].forecast_3m);
+                        const forecast6m = regions.map(r => data[r].forecast_6m);
+
+                        new Chart(document.getElementById('forecastChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: regions,
+                                datasets: [
+                                    {
+                                        label: 'Predicted 3 Months',
+                                        data: forecast3m,
+                                        backgroundColor: 'rgba(245, 158, 11, 0.7)',
+                                        borderColor: 'rgb(245, 158, 11)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Predicted 6 Months',
+                                        data: forecast6m,
+                                        backgroundColor: 'rgba(217, 119, 6, 0.7)',
+                                        borderColor: 'rgb(217, 119, 6)',
+                                        borderWidth: 1
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { position: 'top' },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function (context) {
+                                                let label = context.dataset.label || '';
+                                                if (label) label += ': ';
+                                                if (context.parsed.y !== null) {
+                                                    label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'TRY' }).format(context.parsed.y);
+                                                }
+                                                return label;
+                                            }
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: {
+                                            callback: function (value) {
+                                                return value.toLocaleString();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    });
+
+                // 7. Revenue by City
+                fetch('/api/revenue_by_city')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+                        new Chart(document.getElementById('cityChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'Revenue',
+                                    data: data.values,
+                                    backgroundColor: '#10B981',
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                indexAxis: 'y',
+                                responsive: true,
+                                maintainAspectRatio: false,
+                            }
+                        });
+                    });
+
+                // 8. Monthly Seasonality
+                fetch('/api/monthly_seasonality')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+                        new Chart(document.getElementById('seasonalityChart'), {
+                            type: 'line',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'Monthly Revenue',
+                                    data: data.values,
+                                    borderColor: '#F59E0B',
+                                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                    fill: true,
+                                    tension: 0.4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                            }
+                        });
+                    });
+
+                // 9. Sales by Day
+                fetch('/api/sales_by_day')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+                        new Chart(document.getElementById('dayChart'), {
+                            type: 'radar',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'Revenue per Day',
+                                    data: data.values,
+                                    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                                    borderColor: '#6366F1',
+                                    pointBackgroundColor: '#6366F1'
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                    });
+
+                // 10. Basket Distribution
+                fetch('/api/basket_distribution')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+                        new Chart(document.getElementById('basketChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'Orders',
+                                    data: data.values,
+                                    backgroundColor: '#6366F1',
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: { y: { beginAtZero: true } }
+                            }
+                        });
+                    });
+
+                // 11. Revenue by Town
+                fetch('/api/revenue_by_town')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+                        new Chart(document.getElementById('townChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'Revenue',
+                                    data: data.values,
+                                    backgroundColor: '#8B5CF6',
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                indexAxis: 'y',
+                                responsive: true,
+                                maintainAspectRatio: false,
+                            }
+                        });
+                    });
+
+                // 12. Revenue by District
+                fetch('/api/revenue_by_district')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+                        new Chart(document.getElementById('districtChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'Revenue',
+                                    data: data.values,
+                                    backgroundColor: '#EC4899',
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                indexAxis: 'y',
+                                responsive: true,
+                                maintainAspectRatio: false,
+                            }
+                        });
+                    });
+
+                // 13. Revenue by Year
+                fetch('/api/revenue_by_year')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+                        new Chart(document.getElementById('yearChart'), {
+                            type: 'line',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'Revenue',
+                                    data: data.values,
+                                    borderColor: '#3B82F6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    fill: true,
+                                    tension: 0.4,
+                                    pointRadius: 5,
+                                    pointBackgroundColor: '#3B82F6'
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: {
+                                            callback: function (value) {
+                                                return value.toLocaleString();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    });
+
+                // 14. Profit Analysis
+                fetch('/api/profit_analysis')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+                        new Chart(document.getElementById('profitChart'), {
+                            type: 'doughnut',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    data: data.values,
+                                    backgroundColor: ['#EF4444', '#10B981']
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom'
+                                    }
+                                }
+                            }
+                        });
+                    });
+
+                // 15. Revenue by Age Groups
+                fetch('/api/age_revenue')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+                        new Chart(document.getElementById('ageRevenueChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'Revenue',
+                                    data: data.values,
+                                    backgroundColor: '#14B8A6',
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: { y: { beginAtZero: true } }
+                            }
+                        });
+                    });
+
+                // 16. Model Performance Dashboard
+                fetch('/api/predictions')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error || !data.length) return;
+
+                        const labels = data.map(m => m.Model);
+                        const accuracy = data.map(m => m.Accuracy);
+                        const f1 = data.map(m => m['F1-score']);
+                        const auc = data.map(m => m['ROC-AUC']);
+
+                        // Update Table
+                        const tbody = document.querySelector('#metricsTable tbody');
+                        tbody.innerHTML = data.map(m => `
+                        <tr>
+                            <td class="px-4 py-2 font-medium text-gray-900">${m.Model}</td>
+                            <td class="px-4 py-2">${(m.Accuracy * 100).toFixed(1)}%</td>
+                            <td class="px-4 py-2">${(m['F1-score'] * 100).toFixed(1)}%</td>
+                            <td class="px-4 py-2">${(m['ROC-AUC'] * 100).toFixed(1)}%</td>
+                        </tr>
+                    `).join('');
+
+                        // Update Chart
+                        new Chart(document.getElementById('modelPerformanceChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [
+                                    { label: 'Accuracy', data: accuracy, backgroundColor: '#3B82F6' },
+                                    { label: 'F1-Score', data: f1, backgroundColor: '#10B981' },
+                                    { label: 'ROC-AUC', data: auc, backgroundColor: '#8B5CF6' }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: { y: { beginAtZero: true, max: 1 } }
+                            }
+                        });
+                    });
+            }
+
+            async function loadStats() {
+                try {
+                    const resp = await fetch('/api/overall_stats');
+                    const data = await resp.json();
+                    if (data.error) throw new Error(data.error);
+
+                    // Format currency
+                    const fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+
+                    document.getElementById('statRevenue').textContent = fmt.format(data.total_revenue);
+                    document.getElementById('statOrders').textContent = data.total_orders.toLocaleString();
+                    document.getElementById('statCustomers').textContent = data.total_customers.toLocaleString();
+                    document.getElementById('statAov').textContent = fmt.format(data.avg_order_value);
+
+                } catch (e) {
+                    console.error("Stats error:", e);
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                loadDashboards();
+                loadStats();
+            });
+        </script>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white mt-auto py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <p class="text-gray-400 text-sm">© 2025 • 3A Superstore • Designed with simplicity</p>
+            </div>
+        </footer>
+</body>
+
+</html>

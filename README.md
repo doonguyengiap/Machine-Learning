@@ -1,92 +1,52 @@
-<<<<<<< HEAD
-# 3A Superstore Analysis
+# 3A Superstore Machine Learning Project
 
-This repository contains notebooks and helper code to analyze and model the Superstore dataset.
+Dự án phân tích và dự báo hành vi khách hàng sử dụng bộ dữ liệu Superstore.
 
-## Setup
+## 1. Cấu trúc thư mục (Repository Structure)
+```
+3A_Superstore/
+├── README.md                # Hướng dẫn cài đặt và chạy project
+├── Nx_report.pdf            # Báo cáo project (Sinh viên tự cập nhật x)
+├── data/                    # Thư mục chứa dữ liệu
+│   └── processed_data.csv   # Dữ liệu đã tiền xử lý
+├── src/                     # Mã nguồn Python (Pipeline chuẩn)
+│   ├── preprocessing.py     # Xử lý dữ liệu
+│   ├── eda.py               # Phân tích dữ liệu khám phá (EDA)
+│   ├── feature_engineering.py # Tạo và chọn đặc trưng
+│   ├── model_student.py     # Huấn luyện mô hình (Họ và tên SV)
+│   ├── evaluation.py        # Đánh giá mô hình
+│   └── main.py              # Script chính để chạy toàn bộ pipeline
+├── requirements.txt         # Danh sách thư viện cần cài
+└── reports/                 # Chứa các biểu đồ và kết quả output
+```
 
-Recommended: create a conda environment from `environment.yml` or use `requirements.txt`:
+## 2. Hướng dẫn cài đặt (Installation)
+
+Yêu cầu Python 3.8+. Nên sử dụng môi trường ảo (venv).
 
 ```bash
-conda env create -f environment.yml
-conda activate superstore
-# or
-python -m pip install -r requirements.txt
+# Tạo môi trường ảo
+python -m venv .venv
+source .venv/bin/activate  # Trên Linux/Mac
+# .venv\Scripts\activate   # Trên Windows
+
+# Cài đặt thư viện
+pip install -r requirements.txt
 ```
 
-## Key files
-- `data_preprocessing.ipynb` — data cleaning and saving `data/processed_data.csv`.
-- `3A_Superstore.ipynb` — analysis, classification, time-series, market-basket, churn.
-- `src/` — helper modules: `preprocessing.py`, `features.py`, `models.py`.
-- `scripts/group_cv_tune.py` — run group-aware RandomizedSearchCV and save models.
-- `scripts/generate_reports.py` — generate report and confusion matrix plots.
-- `tests/` — pytest unit tests for core functions.
+## 3. Cách chạy Project (Usage)
 
-## Reproduce training and reports
-
-Run hyperparameter tuning (group-aware):
+Để chạy toàn bộ quá trình từ tiền xử lý, phân tích EDA đến huấn luyện và đánh giá mô hình, hãy chạy lệnh sau:
 
 ```bash
-python scripts/group_cv_tune.py
+python src/main.py
 ```
 
-Generate human-readable report (confusion matrices + markdown):
+Kết quả sẽ được lưu trong thư mục `reports/` bao gồm các biểu đồ (figures) và file so sánh mô hình (JSON).
 
-```bash
-python scripts/generate_reports.py
-```
-
-Verify saved models quickly:
-
-```bash
-PYTHONPATH=. python scripts/verify_models.py
-```
-
-## Tests & CI
-
-Run tests locally with:
-
-```bash
-PYTHONPATH=. pytest -q
-```
-
-A GitHub Actions workflow is present at `.github/workflows/ci.yml` to run tests and lint.
-
-## Notes
-- The data uses semicolon delimiters and comma decimals; `src.preprocessing.detect_sep` and `clean_numeric_columns` handle these formats.
-- Models are saved to `models/` and CV reports are under `reports/`.
-
-## Project layout (reorganized)
-```
-project-name/                # Thư mục gốc của dự án
-│
-├── README.md                # Giới thiệu dự án, cách chạy code, mục tiêu, etc.
-├── requirements.txt         # Liệt kê các thư viện Python cần thiết
-│
-├── data/                    # Chứa dữ liệu (processed + raw backups)
-│   ├── processed_data.csv   # File dữ liệu đã xử lý
-│   └── rawdata/             # Canonical raw files (required): Orders.csv, Order_Details.csv, Customers.csv
-│
-├── notebooks/               # Jupyter Notebooks (exploratory + preprocessing)
-│   └── exploratory_analysis.ipynb
-│
-├── src/                     # Thư mục chứa code
-│   ├── main.py              # File chạy chính (CLI)
-│   ├── lr_model.py          # Logistic Regression wrapper
-│   ├── knn_model.py         # KNN wrapper
-│   ├── rf_model.py          # Random Forest wrapper
-│   ├── xgb_model.py         # XGBoost wrapper
-│   ├── gb_model.py          # Gradient Boosting wrapper
-│   └── adaboost_model.py    # AdaBoost wrapper
-│
-├── reports/                 # Thư mục báo cáo và phân công
-│   ├── report.md
-│   └── task_assignment.md
-│
-└── .gitignore               # Để loại bỏ các file không cần thiết khi push
-```
-
-=======
-# Machine-Learning
-Machine Learning
->>>>>>> d2c21b0d61a78b834fec12945c7652e16c79c361
+## 4. Các thành phần chính của Pipeline
+- **Preprocessing**: Tự động nhận diện dấu phân cách, làm sạch cột số và định dạng ngày tháng.
+- **EDA**: Tạo các biểu đồ phân bố lợi nhuận, tương quan đặc trưng và xu hướng thời gian.
+- **Feature Engineering**: Tính toán các chỉ số RFM (Recency, Frequency, Monetary) cho từng khách hàng và tạo biến mục tiêu `IS_PROFIT`.
+- **Modeling**: Huấn luyện Random Forest và Logistic Regression với cân bằng trọng số lớp (class balance).
+- **Evaluation**: Đánh giá chi tiết bằng Accuracy, F1-score, ROC-AUC và Confusion Matrix.

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3A Superstore - Data Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-store text-blue-600 text-2xl mr-3"></i>
+                    <span class="text-xl font-bold text-gray-800">3A Superstore</span>
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="text-gray-600 hover:text-blue-600 transition duration-300">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="/store" class="text-blue-600 font-semibold">
+                        <i class="fas fa-store mr-2"></i>Store Data
+                    </a>
+                    <a href="/analytics" class="text-gray-600 hover:text-blue-600 transition duration-300">
+                        <i class="fas fa-chart-bar mr-2"></i>Analytics
+                    </a>
+                    <a href="/goto/home" class="text-gray-600 hover:text-blue-600 transition duration-300">
+                        <i class="fas fa-info-circle mr-2"></i>About
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl font-bold mb-2">3A Superstore Data Explorer</h1>
+            <p class="text-xl text-blue-100">Explore processed sales
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center justify-center">
+        <div class="bg-white rounded-xl shadow-lg p-12 text-center max-w-lg border border-gray-100">
+            <div class="bg-red-100 p-6 rounded-full mb-8 inline-block">
+                <i class="fas fa-lock text-5xl text-red-600"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Private Information</h2>
+            <p class="text-gray-600 text-lg leading-relaxed">
+                Access to this raw dataset is restricted. Please refer to the
+                <a href="/analytics" class="text-blue-600 font-semibold hover:underline">Analytics Dashboard</a>
+                for aggregated insights and business performance metrics.
+            </p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-auto py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-400 text-sm">© 2025 • 3A Superstore • Designed with simplicity</p>
+        </div>
+    </footer>
+
+    <script>
+    </script>
+</body>
+
+</html>

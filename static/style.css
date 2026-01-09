@@ -1,0 +1,248 @@
+:root {
+    --primary-color: #1a237e;
+    --secondary-color: #303f9f;
+    --accent-color: #ff4081;
+    --bg-color: #f5f7fa;
+    --sidebar-color: #121858;
+    --text-color: #2c3e50;
+    --card-bg: #ffffff;
+    --shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    min-height: 100vh;
+}
+
+.dashboard-container {
+    display: flex;
+    width: 100%;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-color);
+    color: white;
+    padding: 2rem;
+    position: fixed;
+    height: 100vh;
+}
+
+.sidebar h2 {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+    font-weight: 600;
+}
+
+.sidebar h2 span {
+    color: var(--accent-color);
+}
+
+.sidebar nav ul {
+    list-style: none;
+}
+
+.sidebar nav ul li {
+    margin-bottom: 1.5rem;
+}
+
+.sidebar nav ul li a {
+    color: #a0aec0;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: 0.3s;
+}
+
+.sidebar nav ul li.active a,
+.sidebar nav ul li a:hover {
+    color: white;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 260px;
+    padding: 2rem;
+    width: calc(100% - 260px);
+}
+
+header {
+    margin-bottom: 3rem;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+}
+
+header p {
+    color: #718096;
+    margin-top: 0.5rem;
+}
+
+/* Cards */
+.card {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    color: var(--primary-color);
+}
+
+/* Upload Section */
+.upload-grid {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.custom-file-upload {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.custom-file-upload:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: var(--text-color);
+    padding: 0.8rem 2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-secondary:hover {
+    background: #cbd5e0;
+}
+
+/* Charts */
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.chart-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.chart-card img {
+    max-width: 100%;
+    margin-top: 1rem;
+    border-radius: 10px;
+}
+
+/* Predict Form */
+.predict-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    max-width: 600px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-group label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #4a5568;
+}
+
+.input-group input {
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.prediction-result {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #fff5f7;
+    border-left: 5px solid var(--accent-color);
+    border-radius: 5px;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    margin-top: 5rem;
+}
+
+.empty-state img {
+    width: 200px;
+    margin-bottom: 2rem;
+}
+
+.empty-state p {
+    color: #718096;
+    font-size: 1.2rem;
+}
+
+/* Flash Messages */
+.flash-messages {
+    margin-bottom: 2rem;
+}
+
+.alert {
+    padding: 1rem;
+    background: #edf2f7;
+    border-radius: 8px;
+    color: var(--primary-color);
+    font-weight: 600;
+}

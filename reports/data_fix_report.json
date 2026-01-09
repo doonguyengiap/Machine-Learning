@@ -1,0 +1,162 @@
+{
+  "loaded_sep": ";",
+  "before": {
+    "shape": [
+      2000,
+      25
+    ],
+    "columns": {
+      "ORDERID": "int64",
+      "ORDERDETAILID": "int64",
+      "AMOUNT": "int64",
+      "UNITPRICE": "int64",
+      "TOTALPRICE": "int64",
+      "ITEMID": "int64",
+      "ITEMCODE": "int64",
+      "BRANCH_ID": "object",
+      "DATE_": "object",
+      "USERID": "int64",
+      "NAMESURNAME_x": "object",
+      "TOTALBASKET": "int64",
+      "USERNAME_": "object",
+      "NAMESURNAME_y": "object",
+      "STATUS_": "int64",
+      "USERGENDER": "object",
+      "USERBIRTHDATE": "object",
+      "REGION": "object",
+      "CITY": "object",
+      "TOWN": "object",
+      "DISTRICT": "object",
+      "ADDRESSTEXT": "object",
+      "Year": "int64",
+      "Month": "int64",
+      "Age": "int64"
+    },
+    "null_counts": {
+      "ORDERID": 0,
+      "ORDERDETAILID": 0,
+      "AMOUNT": 0,
+      "UNITPRICE": 0,
+      "TOTALPRICE": 0,
+      "ITEMID": 0,
+      "ITEMCODE": 0,
+      "BRANCH_ID": 0,
+      "DATE_": 0,
+      "USERID": 0,
+      "NAMESURNAME_x": 0,
+      "TOTALBASKET": 0,
+      "USERNAME_": 0,
+      "NAMESURNAME_y": 0,
+      "STATUS_": 0,
+      "USERGENDER": 0,
+      "USERBIRTHDATE": 0,
+      "REGION": 0,
+      "CITY": 0,
+      "TOWN": 0,
+      "DISTRICT": 0,
+      "ADDRESSTEXT": 0,
+      "Year": 0,
+      "Month": 0,
+      "Age": 0
+    }
+  },
+  "fixes": {
+    "clean_numeric_columns": {
+      "cols": [
+        "TOTALBASKET",
+        "UNITPRICE",
+        "TOTALPRICE",
+        "AMOUNT"
+      ]
+    },
+    "id_columns": {
+      "ORDERID": {
+        "before_na": 0,
+        "after_na": 0
+      },
+      "ORDERDETAILID": {
+        "before_na": 0,
+        "after_na": 0
+      },
+      "ITEMID": {
+        "before_na": 0,
+        "after_na": 0
+      },
+      "USERID": {
+        "before_na": 0,
+        "after_na": 0
+      }
+    },
+    "date_parsing": {
+      "DATE_": {
+        "before_na": 0,
+        "after_na": 0
+      },
+      "USERBIRTHDATE": {
+        "before_na": 0,
+        "after_na": 0
+      }
+    }
+  },
+  "timestamp": "2026-01-06T13:58:35.848275",
+  "after": {
+    "shape": [
+      2000,
+      25
+    ],
+    "columns": {
+      "ORDERID": "Int64",
+      "ORDERDETAILID": "Int64",
+      "AMOUNT": "int64",
+      "UNITPRICE": "int64",
+      "TOTALPRICE": "int64",
+      "ITEMID": "Int64",
+      "ITEMCODE": "object",
+      "BRANCH_ID": "object",
+      "DATE_": "datetime64[ns]",
+      "USERID": "Int64",
+      "NAMESURNAME_x": "object",
+      "TOTALBASKET": "int64",
+      "USERNAME_": "object",
+      "NAMESURNAME_y": "object",
+      "STATUS_": "object",
+      "USERGENDER": "object",
+      "USERBIRTHDATE": "datetime64[ns]",
+      "REGION": "object",
+      "CITY": "object",
+      "TOWN": "object",
+      "DISTRICT": "object",
+      "ADDRESSTEXT": "object",
+      "Year": "int64",
+      "Month": "int64",
+      "Age": "int64"
+    },
+    "null_counts": {
+      "ORDERID": 0,
+      "ORDERDETAILID": 0,
+      "AMOUNT": 0,
+      "UNITPRICE": 0,
+      "TOTALPRICE": 0,
+      "ITEMID": 0,
+      "ITEMCODE": 0,
+      "BRANCH_ID": 0,
+      "DATE_": 0,
+      "USERID": 0,
+      "NAMESURNAME_x": 0,
+      "TOTALBASKET": 0,
+      "USERNAME_": 0,
+      "NAMESURNAME_y": 0,
+      "STATUS_": 0,
+      "USERGENDER": 0,
+      "USERBIRTHDATE": 0,
+      "REGION": 0,
+      "CITY": 0,
+      "TOWN": 0,
+      "DISTRICT": 0,
+      "ADDRESSTEXT": 0,
+      "Year": 0,
+      "Month": 0,
+      "Age": 0
+    }
+  }
+}
