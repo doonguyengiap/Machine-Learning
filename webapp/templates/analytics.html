@@ -198,10 +198,39 @@
                     </div>
                 </div>
 
-                <!-- Age Groups -->
+                <!-- Age Pyramid -->
                 <div class="bg-gradient-to-br from-sky-50 to-white p-6 rounded-lg shadow-lg border-2 border-sky-200">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Age Groups</h3>
-                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="ageChart"></canvas></div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Age Distribution by Gender</h3>
+                    <div class="h-64 bg-white rounded p-3 border border-gray-300"><canvas id="agePyramidChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pareto Analysis Section -->
+        <div class="bg-white rounded-xl shadow-xl border-2 border-gray-200 p-8 mt-10 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-yellow-600 pl-4 pb-2">Business Critical
+                Insights (80/20 Rule)</h2>
+            <div class="bg-gradient-to-br from-yellow-50 to-white p-6 rounded-lg shadow-lg border-2 border-yellow-200">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">Customer Revenue Pareto Analysis</h3>
+                    <span class="text-sm bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded border border-yellow-300">Top
+                        50 Customers</span>
+                </div>
+                <div class="h-80 bg-white rounded p-4 border border-gray-300"><canvas id="paretoChart"></canvas></div>
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div class="bg-blue-50 border border-blue-200 p-3 rounded shadow-sm">
+                        <span class="block text-gray-500 text-xs uppercase font-semibold">Total Customers</span>
+                        <span class="font-bold text-blue-700 text-xl" id="paretoTotalCust">-</span>
+                    </div>
+                    <div class="bg-green-50 border border-green-200 p-3 rounded shadow-sm">
+                        <span class="block text-gray-500 text-xs uppercase font-semibold">Top 20% Dist. Share</span>
+                        <span class="font-bold text-green-700 text-xl" id="paretoTop20Share">-</span>
+                    </div>
+                    <div class="bg-purple-50 border border-purple-200 p-3 rounded shadow-sm">
+                        <span class="block text-gray-500 text-xs uppercase font-semibold">Total Revenue Analyzed</span>
+                        <span class="font-bold text-purple-700 text-xl" id="paretoTotalRev">-</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -377,19 +406,18 @@
                         });
                     });
 
-                // 5. Demographics
+                // 5. Demographics (Gender + Age Pyramid)
                 fetch('/api/demographics')
                     .then(r => r.json())
                     .then(data => {
                         if (data.error) return console.error(data.error);
 
-                        // Gender
+                        // Gender Chart
                         const genderColors = data.gender.labels.map(label => {
                             if (label.toLowerCase() === 'male') return '#60A5FA';
                             if (label.toLowerCase() === 'female') return '#F472B6';
-                            return '#E5E7EB'; // Default for Unknown
+                            return '#E5E7EB';
                         });
-
                         new Chart(document.getElementById('genderChart'), {
                             type: 'doughnut',
                             data: {
@@ -399,28 +427,144 @@
                                     backgroundColor: genderColors
                                 }]
                             },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false
-                            }
+                            options: { responsive: true, maintainAspectRatio: false }
                         });
+                    });
 
-                        // Age
-                        new Chart(document.getElementById('ageChart'), {
+                // Age Pyramid
+                fetch('/api/age_pyramid')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+
+                        // Prepare data for pyramid (Male negative, Female positive)
+                        const maleData = data.male.map(v => -v);
+                        const femaleData = data.female;
+
+                        new Chart(document.getElementById('agePyramidChart'), {
                             type: 'bar',
                             data: {
-                                labels: data.age.labels,
-                                datasets: [{
-                                    label: 'Customers',
-                                    data: data.age.values,
-                                    backgroundColor: '#10B981',
-                                    borderRadius: 4
-                                }]
+                                labels: data.labels,
+                                datasets: [
+                                    {
+                                        label: 'Male',
+                                        data: maleData,
+                                        backgroundColor: '#60A5FA',
+                                        borderRadius: 4
+                                    },
+                                    {
+                                        label: 'Female',
+                                        data: femaleData,
+                                        backgroundColor: '#F472B6',
+                                        borderRadius: 4
+                                    }
+                                ]
+                            },
+                            options: {
+                                indexAxis: 'y',
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    x: {
+                                        stacked: true,
+                                        ticks: {
+                                            callback: function (value) {
+                                                return Math.abs(value);
+                                            }
+                                        }
+                                    },
+                                    y: {
+                                        stacked: true,
+                                        beginAtZero: true
+                                    }
+                                },
+                                plugins: {
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function (context) {
+                                                return context.dataset.label + ': ' + Math.abs(context.raw);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    });
+
+                // Pareto Chart
+                fetch('/api/pareto_customers')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.error) return console.error(data.error);
+
+                        // Update Stats
+                        document.getElementById('paretoTotalCust').textContent = data.total_customers.toLocaleString();
+                        document.getElementById('paretoTotalRev').textContent = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(data.total_revenue);
+                        document.getElementById('paretoTop20Share').textContent = data.top_20_pct_revenue_share.toFixed(1) + '%';
+
+                        new Chart(document.getElementById('paretoChart'), {
+                            type: 'bar',
+                            data: {
+                                labels: data.labels,
+                                datasets: [
+                                    {
+                                        label: 'Cumulative %',
+                                        data: data.cumulative_pct,
+                                        type: 'line',
+                                        borderColor: '#EF4444',
+                                        borderWidth: 2,
+                                        fill: false,
+                                        yAxisID: 'y1',
+                                        pointRadius: 2
+                                    },
+                                    {
+                                        label: 'Revenue',
+                                        data: data.values,
+                                        backgroundColor: '#F59E0B',
+                                        yAxisID: 'y',
+                                        borderRadius: 2
+                                    }
+                                ]
                             },
                             options: {
                                 responsive: true,
                                 maintainAspectRatio: false,
-                                scales: { y: { beginAtZero: true } }
+                                scales: {
+                                    y: {
+                                        type: 'linear',
+                                        display: true,
+                                        position: 'left',
+                                        title: { display: true, text: 'Revenue' }
+                                    },
+                                    y1: {
+                                        type: 'linear',
+                                        display: true,
+                                        position: 'right',
+                                        min: 0,
+                                        max: 100,
+                                        grid: { drawOnChartArea: false },
+                                        title: { display: true, text: 'Cumulative %' },
+                                        ticks: { callback: v => v + '%' }
+                                    },
+                                    x: {
+                                        ticks: { display: false } // Hide customer IDs to avoid clutter
+                                    }
+                                },
+                                plugins: {
+                                    annotation: {
+                                        annotations: {
+                                            line1: {
+                                                type: 'line',
+                                                yMin: 80,
+                                                yMax: 80,
+                                                borderColor: 'rgba(0,0,0,0.5)',
+                                                borderWidth: 1,
+                                                borderDash: [6, 6],
+                                                label: { content: '80% Threshold', enabled: true, position: 'end' }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         });
                     });

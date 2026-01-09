@@ -612,6 +612,97 @@ def analytics():
     return render_template('analytics.html')
 
 
+@app.route('/api/age_pyramid')
+def api_age_pyramid():
+    """Return age distribution split by gender (Age Pyramid)."""
+    try:
+        from src.preprocessing import robust_read_processed, clean_numeric_columns
+        import numpy as np
+        
+        df, _ = robust_read_processed()
+        
+        # Check for required columns
+        age_col = next((c for c in df.columns if c.upper() == 'AGE'), None)
+        gender_col = next((c for c in df.columns if c.upper() in ['USERGENDER', 'GENDER']), None)
+        
+        if not age_col or not gender_col:
+            return jsonify({'error': 'Required columns (Age, Gender) missing'}), 400
+            
+        df = clean_numeric_columns(df, cols=[age_col])
+        
+        # Create age bins
+        bins = [0, 18, 25, 35, 45, 55, 65, 100]
+        labels = ['<18', '18-25', '26-35', '36-45', '46-55', '56-65', '65+']
+        df['AgeGroup'] = pd.cut(df[age_col], bins=bins, labels=labels, right=False)
+        
+        # Standardize gender
+        # Map K/E to Female/Male or ensure Male/Female
+        df['GenderNorm'] = df[gender_col].fillna('Unknown').apply(
+            lambda x: 'Female' if str(x).upper() in ['K', 'FEMALE', 'F'] else ('Male' if str(x).upper() in ['E', 'MALE', 'M'] else 'Other')
+        )
+        
+        # Calculate counts
+        grouped = df.groupby(['AgeGroup', 'GenderNorm']).size().unstack(fill_value=0)
+        
+        # Ensure Male and Female columns exist
+        if 'Male' not in grouped.columns:
+            grouped['Male'] = 0
+        if 'Female' not in grouped.columns:
+            grouped['Female'] = 0
+            
+        return jsonify({
+            'labels': labels,
+            'male': grouped['Male'].reindex(labels, fill_value=0).tolist(),
+            'female': grouped['Female'].reindex(labels, fill_value=0).tolist()
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/pareto_customers')
+def api_pareto_customers():
+    """Return Pareto analysis (80/20 rule) for customers."""
+    try:
+        from src.preprocessing import robust_read_processed, clean_numeric_columns
+        df, _ = robust_read_processed()
+        
+        if 'TOTALPRICE' not in df.columns:
+            return jsonify({'error': 'TOTALPRICE column missing'}), 400
+            
+        user_col = next((c for c in df.columns if c.upper() in ['USERID', 'CUSTOMERID', 'USER_ID']), None)
+        if not user_col:
+             return jsonify({'error': 'User ID column missing'}), 400
+             
+        df = clean_numeric_columns(df, cols=['TOTALPRICE'])
+        
+        # Group by customer and sum revenue
+        customer_revenue = df.groupby(user_col)['TOTALPRICE'].sum().sort_values(ascending=False)
+        
+        # Calculate cumulative percentage
+        total_revenue = customer_revenue.sum()
+        cumulative_revenue = customer_revenue.cumsum()
+        cumulative_pct = (cumulative_revenue / total_revenue) * 100
+        
+        # Limit to top N for visualization (e.g., top 50 or top 20% of customers if list is huge)
+        # For the chart, we might want to show the "head" clearly. 
+        # Let's take top 50 customers to keep chart readable, but ensure we return metrics about the tail
+        
+        top_n = 50
+        top_customers = customer_revenue.head(top_n)
+        top_cumulative_pct = cumulative_pct.head(top_n)
+        
+        return jsonify({
+            'labels': top_customers.index.astype(str).tolist(),
+            'values': [float(x) for x in top_customers.values],
+            'cumulative_pct': [float(x) for x in top_cumulative_pct.values],
+            'total_customers': int(len(customer_revenue)),
+            'total_revenue': float(total_revenue),
+            'top_20_pct_count': int(len(customer_revenue) * 0.2),
+            'top_20_pct_revenue_share': float(cumulative_pct.iloc[int(len(customer_revenue) * 0.2)]) if len(customer_revenue) > 5 else 0.0
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     # Enable debug and auto-reload when running in development (FLASK_ENV=development or FLASK_DEBUG=1)
     debug_mode = os.environ.get('FLASK_ENV', '').lower() == 'development' or os.environ.get('FLASK_DEBUG') == '1'
